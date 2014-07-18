@@ -27,12 +27,14 @@ def get_country_data():
     """
 
     """
-    logging.debug('[get_country_data] loading country data from (country_file_path: %s)', Config.COUNTRIES_DATABASE_FILE)
-    country_data = {}
-
     with closing(country_connection.cursor()) as cursor:
-
         for row in cursor.execute('SELECT * FROM countries WHERE is_available = 1'):
-            pass
-
-    return country_data
+            yield {
+                'county_count': row[0],
+                'states_count': row[1],
+                'telephone_prefix': row[2],
+                'country_name': row[3],
+                'country_full_name': row[4],
+                'country_code': row[5],
+                'country_extended_code': row[6]
+            }
