@@ -54,3 +54,6 @@ docs/_build/
 
 # Idea project
 .idea/*
+
+# Internal helpers
+helper_*.py
