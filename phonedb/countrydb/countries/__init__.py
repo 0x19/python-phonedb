@@ -13,6 +13,10 @@ __email__ = PACKAGE_MAINTAINER_EMAIL
 __status__ = PACKAGE_STATUS
 
 from new import classobj
+from phonedb.countrydb.data import get_country_data
+
+#
+COUNTRIES_LOADED = False
 
 
 class CountryResourceMetaClass(type):
@@ -29,4 +33,7 @@ class CountryResource(object):
         pass
 
 
+class Us(object):
+    pass
 
+country_data = get_country_data()

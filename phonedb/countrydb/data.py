@@ -12,15 +12,27 @@ __maintainer__ = PACKAGE_MAINTAINER
 __email__ = PACKAGE_MAINTAINER_EMAIL
 __status__ = PACKAGE_STATUS
 
-import os
-
 from phonedb.logger import logging
 logging = logging.getLogger(__name__)
 
+import sqlite3
+from contextlib import closing
+from phonedb.config import Config
 
-class Config(object):
+country_connection = sqlite3.connect(Config.COUNTRIES_DATABASE_FILE)
+
+
+#@memoize
+def get_country_data():
     """
 
     """
+    logging.debug('[get_country_data] loading country data from (country_file_path: %s)', Config.COUNTRIES_DATABASE_FILE)
+    country_data = {}
 
-    COUNTRIES_DATABASE_FILE = '/'.join([os.getcwd(), 'phonedb/data/countries.db'])
+    with closing(country_connection.cursor()) as cursor:
+
+        for row in cursor.execute('SELECT * FROM countries WHERE is_available = 1'):
+            pass
+
+    return country_data
