@@ -1,11 +1,11 @@
 # -*- coding: UTF-8 -*-
 
-from phonedb import PACKAGE_VERSION
+from phonedb import __version__
 from setuptools import setup
 
 setup(
     name                = "python-phonedb",
-    version             = PACKAGE_VERSION,
+    version             = __version__,
     description         = "Discover various information about specific phone number",
     author              = "Nevio Vesic",
     author_email        = "nevio.vesic@gmail.com",
