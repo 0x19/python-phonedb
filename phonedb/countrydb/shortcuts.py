@@ -7,7 +7,6 @@ from phonedb.logger import logging
 logging = logging.getLogger(__name__)
 
 from phonedb.countrydb.exceptions import CountryParameterMissing
-from phonedb.countrydb.utils import validate_country_code, validate_country_prefix
 
 
 def discover_country(**kwargs):
@@ -16,7 +15,6 @@ def discover_country(**kwargs):
     Method requires at least one of the following parameters to be passed along:
 
     :param country_code
-    :param country_alpha_3
     :param country_prefix
     :
     """
@@ -27,17 +25,19 @@ def discover_country(**kwargs):
             "At least one parameter needs to be passed along to in order be able discover country"
         )
 
-    if kwargs.get('country_code') or kwargs.get('country_alpha_3'):
-        country_code = validate_country_code(kwargs.get('country_code'), None)
-        logging.debug('[discover_country] validated (country_code: %s)', country_code)
-
     if kwargs.get('country_prefix'):
-        country_code = validate_country_code(kwargs.get('country_code'), None)
-        logging.debug('[discover_country] validated (country_code: %s)', country_code)
+        country_search_string = kwargs.get('country_prefix')
 
+    if kwargs.get('country_code'):
+        country_search_string = kwargs.get('country_code')
 
-    package_class_name = country_code.capitalize()
+    logging.debug('[discover_country] attempting to discover country against (string: %s)', country_search_string)
+
+    package_class_name = country_search_string.capitalize()
     package_path = __import__('phonedb.countrydb.countries', globals(), locals(), [package_class_name])
 
-    return getattr(package_path, package_class_name)()
-
+    try:
+        return getattr(package_path, package_class_name)()
+    except AttributeError as e:
+        logging.error('[discover_country] unable to discover country against (class_reference: %s)' % package_class_name)
+        return None

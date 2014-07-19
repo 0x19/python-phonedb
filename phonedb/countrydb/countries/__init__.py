@@ -85,3 +85,5 @@ with closing(get_country_data()) as data:
     country_resource_dict.update(country_data)
 
     globals()[country_class_name] = classobj(country_class_name, (CountryResource,), country_resource_dict)
+    globals()[country_data.get('country_extended_code').capitalize()] = globals()[country_class_name]
+    globals()[country_data.get('telephone_prefix')] = globals()[country_class_name]
